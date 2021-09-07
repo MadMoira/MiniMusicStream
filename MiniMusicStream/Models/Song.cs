@@ -1,10 +1,11 @@
+using System;
 using System.Linq;
 
 namespace MiniMusicStream.Models
 {
     public class Song
     {
-        private static readonly string[] FORMATS = { ".mp3" };
+        private static readonly string[] FORMATS = { "mp3" };
         
         public int Id { get; set; }
         public string Name { get; set; }
