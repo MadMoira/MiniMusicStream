@@ -1,12 +1,15 @@
-using System.Linq;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MiniMusicStream.Models;
 using MiniMusicStream.Repositories;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Routing;
+using Swashbuckle.AspNetCore.Swagger;
+
 
 namespace MiniMusicStream.Controllers
 {
@@ -14,7 +17,7 @@ namespace MiniMusicStream.Controllers
     {
         public int page { get; set; }
         public List<T> items { get; set; }
-        public string url { get; set; }
+        public string next { get; set; }
     }
 
     [Route("api/v1/[controller]")]
@@ -33,7 +36,9 @@ namespace MiniMusicStream.Controllers
             _linkGenerator = linkGenerator;
         }
 
-        [HttpGet("/library/artists")]
+        [ProducesResponseType(typeof(PaginatedResponse<Artist>), 200)]
+        [ProducesResponseType(404)]
+        [HttpGet("artists")]
         public IActionResult RetrieveArtists([FromQuery(Name = "page")] int? page)
         {
             var currentPage = page ?? 1;
@@ -45,12 +50,11 @@ namespace MiniMusicStream.Controllers
                 .ToList();
 
             var url = _linkGenerator.GetUriByAction(HttpContext, null, null, new { page = ++currentPage });
-
-            var paginatedResponse = new PaginatedResponse<Artist> { page = currentPage, items = artists, url = url };
+            var paginatedResponse = new PaginatedResponse<Artist> { items = artists, next = url };
             return Ok(paginatedResponse);
         }
 
-        [HttpGet("/library/{artist_id}/albums")]
+        [HttpGet("artist/{artist_id}/albums")]
         public IActionResult RetrieveAlbumsFromArtist(int artist_id, [FromQuery(Name = "page")] int? page)
         {
             var artist = _libraryContext.Artists.Find(artist_id);
@@ -66,7 +70,7 @@ namespace MiniMusicStream.Controllers
             return Ok(albums);
         }
 
-        [HttpGet("/library/{album_id}/songs")]
+        [HttpGet("album/{album_id}/songs")]
         public IActionResult RetrieveSongsFromAlbum(int album_id, [FromQuery(Name = "page")] int? page)
         {
             var album = _libraryContext.Albums.Find(album_id);
@@ -82,7 +86,8 @@ namespace MiniMusicStream.Controllers
             return Ok(songs);
         }
 
-        [HttpGet("/sync")]
+        
+        [HttpGet("sync")]
         public IActionResult ReadLibrary()
         {
             _libraryContext.Database.ExecuteSqlRaw("DELETE FROM Songs");
@@ -124,6 +129,7 @@ namespace MiniMusicStream.Controllers
                     }
                 }
             }
+
             _libraryContext.SaveChanges();
             return Ok(artists);
         }
