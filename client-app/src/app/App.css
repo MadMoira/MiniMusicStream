@@ -1,0 +1,28 @@
+.App {
+  @apply grid gap-4 grid-cols-3;
+  text-align: center;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.test {
+  @apply border-red-500 border-solid border-8;
+}
+
+.app-head {
+  grid-area: header;
+  height: 100px;
+}
+
+.app-menu {
+  grid-area: menu;
+}
+
+.app-content {
+  grid-area: content;
+}
+
+.app-footer {
+  grid-area: footer;
+  height: 100px;
+}
