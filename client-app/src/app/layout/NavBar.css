@@ -1,0 +1,8 @@
+.app-head {
+    @apply flex flex-nowrap;
+    grid-area: header;
+}
+
+.menu-item {
+    @apply px-3.5;
+}
