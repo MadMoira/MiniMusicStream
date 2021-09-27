@@ -1,7 +1,7 @@
-import axios, {AxiosResponse} from "axios";
-import ArtistResponse from "../models/Artist";
+import axios, { AxiosResponse } from "axios";
+import { ArtistResponse } from "../models/Artist";
 
-axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.baseURL = "http://192.168.1.137:5000";
 
 const responseBody = <T>(response: AxiosResponse) => response.data;
 

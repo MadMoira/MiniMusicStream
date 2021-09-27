@@ -26,6 +26,15 @@ namespace MiniMusicStream
             {
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins(
+                        "http://localhost:3000", 
+                        "http://192.168.1.137:3000");
+                });
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MiniMusicStream", Version = "v1" });
@@ -42,9 +51,9 @@ namespace MiniMusicStream
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MiniMusicStream v1"));
             }
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 

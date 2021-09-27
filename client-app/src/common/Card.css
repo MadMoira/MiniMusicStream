@@ -1,0 +1,7 @@
+.card {
+    @apply flex w-9/12 max-h-20 items-center sm:flex-grow-0 flex-grow bg-white m-2;
+}
+
+.card > .logo {
+    @apply bg-red-100;
+}

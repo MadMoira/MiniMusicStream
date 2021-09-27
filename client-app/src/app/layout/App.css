@@ -29,18 +29,6 @@
   grid-area: footer;
 }
 
-.app-content > div {
-  justify-content: space-between;
-}
-
-.card {
-  @apply flex min-w-max max-h-20 items-center sm:flex-grow-0 flex-grow bg-white m-2;
-}
-
-.card > .logo {
-  @apply bg-red-100;
-}
-
 .logo {
   height: 60px;
   width: 60px;
